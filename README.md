@@ -4,7 +4,7 @@
 ##### Афиша
 ![](https://github.com/Censored-Data/MOS.RU/blob/main/Gallery/Afisha.gif?raw=true)
 
-## :rocket: Getting Started
+## :rocket: Приступим
 
 ### Установка
 Frontend: (Port 3001)
