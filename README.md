@@ -6,7 +6,7 @@
 
 ## :rocket: Getting Started
 
-### Installation
+### Установка
 Frontend: (Port 3001)
 ```sh
 cd client
