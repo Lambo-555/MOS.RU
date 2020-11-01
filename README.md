@@ -25,8 +25,6 @@
 
 ##### Афиша
 ![](https://github.com/Censored-Data/MOS.RU/blob/main/Gallery/Afisha.gif?raw=true)
-##### Navigation
-![](https://github.com/Peace-Data/Peace-Data/blob/main/MVP/Demonstration/navigation.png?raw=true)
 
 #### Rate Limiting
 
