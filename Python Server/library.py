@@ -1,3 +1,9 @@
+nltk.downloads('stopwords')
+
+import nltk
+from nltk.corpus import stopwords
+from sklearn.feature_extraction.text import CountVectorizer
+
 dict_users, dict_movies = dict(),dict()
 list_users, list_movies = [], []
 n = 3
@@ -15,12 +21,49 @@ import nmslib
 import itertools
 
 
-def books_recomendation(id, age, is_KD):
-    pass
+
+def books_recommendation(id, age, is_KD):
+    if not is_KD:
+        user_id_and_last_book = pd.read_csv(r'user_id_and_last_book.csv', index_col=0)
+        soup = pd.read_csv(r'soup_data_kaef.csv', index_col=0)
+        cat = pd.read_csv(r'cat.csv', index_col=0)
+        nltk.dowload('stopwords')
+        stop_words = stopwords.words('russian')
+        count = CountVectorizer(stop_words=stop_words)
+        count_matrix = count.fit_transform(soup['soup'])
+        cat = cat.reset_index()
+        indices = pd.Series(cat.index, index=cat['title'])
+
+        def get_recommendations(book_id, cosine_sim=cosine_sim):
+            # Get the index of the movie that matches the title
+            idx = indices[book_id]
+
+            # Get the pairwsie similarity scores of all movies with that movie
+            sim_scores = list(enumerate(cosine_sim[idx]))
+
+            # Sort the movies based on the similarity scores
+            sim_scores = sorted(sim_scores, key=lambda x: x[1], reverse=True)
+
+            # Get the scores of the 10 most similar movies
+            sim_scores = sim_scores[1:16]
+
+            # Get the movie indices
+            movie_indices = [i[0] for i in sim_scores]
+
+            # Return the top 10 most similar movies
+            return cat[['title', 'book_id']].iloc[movie_indices]
+
+        def f(id):
+            a = user_id_and_last_book[user_id_and_last_book['user_id'] == id]['list_readed'].values[0]
+            # print(cat[cat['book_id'] == a]['title'].values[0])
+            print(get_recommendations(a))
+
+        return f(id).to_json()
+    else:
+        pass
 
 
-
-
+#
 def hobby_recommendation(id, age, is_KD):
     if is_KD:
         return get_recs(id)
@@ -114,7 +157,7 @@ def get_recs(ix):
     return names
 
 # Функция рекомендации событий
-def get_recs(age, status=[], fields=0, free=0, ovz=0, online=0):
+def get_recs_event(age, status=[], fields=0, free=0, ovz=0, online=0):
     data = pd.read_csv('event_data.csv', index_col=0)
     cur_data = data[data['Статус']==status].sort_values(by='Дата начала мероприятия')
 
@@ -163,5 +206,4 @@ def get_hobby_age(age):
         i += 1
         return df[df.age.isin(range(age, age+i+1))][['full_name', 'service_name']].iloc[:20].to_json()
 
-
-print(hobby_recommendation('1253177', '10.0', False));
+print(books_recommendation(1, 100, False));
